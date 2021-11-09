@@ -1,0 +1,68 @@
+{
+	"id": "42728097-e5fa-4929-abb1-a04b-92f6182b",
+	"brandColor": "#8C3900",
+	"connectionReferences": {
+		"shared_sharepointonline": {
+			"connection": {
+				"id": "/providers/Microsoft.PowerApps/apis/shared_sharepointonline/connections/c1e75bbd012644f98d0ac4e47519477a"
+			}
+		}
+	},
+	"connectorDisplayName": "Control",
+	"icon": "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzIiIGhlaWdodD0iMzIiIHZlcnNpb249IjEuMSIgdmlld0JveD0iMCAwIDMyIDMyIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPg0KIDxwYXRoIGQ9Im0wIDBoMzJ2MzJoLTMyeiIgZmlsbD0iIzhDMzkwMCIvPg0KIDxwYXRoIGQ9Im04IDEwaDE2djEyaC0xNnptMTUgMTF2LTEwaC0xNHYxMHptLTItOHY2aC0xMHYtNnptLTEgNXYtNGgtOHY0eiIgZmlsbD0iI2ZmZiIvPg0KPC9zdmc+DQo=",
+	"isTrigger": false,
+	"operationName": "Set-List-Visibility-to-Hidden",
+	"operationDefinition": {
+		"type": "Scope",
+		"actions": {
+			"Site-Address": {
+				"type": "Compose",
+				"inputs": "",
+				"runAfter": {},
+				"description": "Compose (eg 'https://contoso.sharepoint.com/sites/sales')"
+			},
+			"List-Title": {
+				"type": "Compose",
+				"inputs": "",
+				"runAfter": {
+					"Site-Address": [
+						"Succeeded"
+					]
+				},
+				"description": "Compose (eg: 'sales forecasts')"
+			},
+			"Mark-List-As-Hidden": {
+				"type": "OpenApiConnection",
+				"inputs": {
+					"host": {
+						"connectionName": "shared_sharepointonline",
+						"operationId": "HttpRequest",
+						"apiId": "/providers/Microsoft.PowerApps/apis/shared_sharepointonline"
+					},
+					"parameters": {
+						"dataset": "@outputs('Site-Address')",
+						"parameters/method": "POST",
+						"parameters/uri": "_api/web/lists/getbytitle('@{encodeUriComponent(outputs('List-Title'))}')",
+						"parameters/headers": {
+							"X-HTTP-Method": "MERGE",
+							"If-Match": "*"
+						},
+						"parameters/body": "{\n  Hidden: true\n}"
+					},
+					"authentication": {
+						"type": "Raw",
+						"value": "@json(decodeBase64(triggerOutputs().headers['X-MS-APIM-Tokens']))['$ConnectionKey']"
+					}
+				},
+				"runAfter": {
+					"List-Title": [
+						"Succeeded"
+					]
+				},
+				"description": "Send an HTTP request to SharePoint"
+			}
+		},
+		"runAfter": {},
+		"description": "Scope"
+	}
+}
