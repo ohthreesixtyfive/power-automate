@@ -8,5 +8,5 @@ In Power Automate
 - Select ` Get-Item-Version-History ` to insert the Scope into your Flow.
 - Provide inputs to the ` Site-Address `, ` List-Title `, and ` List Item Id ` actions.
   - [Optional] Provide input for the ` Version-Label ` action to retrieve a specific version (eg: "2.0").
-    - Version-Label **MUST** be encapsulated in double quotes.
+    - Version-Label input value **MUST** be encapsulated in double quotes.
 - Update ` Get-Item-Versions ` action with the proper Connection Reference.
