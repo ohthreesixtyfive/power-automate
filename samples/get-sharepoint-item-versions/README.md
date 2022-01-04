@@ -1,5 +1,5 @@
 Here in GitHub
-- Copy the entirety of [scope_definition.json](https://github.com/ohthreesixtyfive/power-automate/blob/main/samples/hide-sharepoint-list/scope_definition.json) to your clipboard.
+- Copy the entirety of [scope_definition.json](https://github.com/ohthreesixtyfive/power-automate/blob/main/samples/get-sharepoint-item-versions/scope_definition.json) to your clipboard.
 
 In Power Automate
 - In Power Automate/Flow, click ` + New step `.
