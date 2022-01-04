@@ -1,0 +1,83 @@
+{
+	"id": "bf66a41a-c991-4a1e-80c9-dee4-bb63d527",
+	"brandColor": "#8C3900",
+	"connectionReferences": {
+		"shared_sharepointonline": {
+			"connection": {
+				"id": "/providers/Microsoft.PowerApps/apis/shared_sharepointonline/connections/c1b2f588d3f6486fa02c75dfa2508df5"
+			}
+		}
+	},
+	"connectorDisplayName": "Control",
+	"icon": "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzIiIGhlaWdodD0iMzIiIHZlcnNpb249IjEuMSIgdmlld0JveD0iMCAwIDMyIDMyIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPg0KIDxwYXRoIGQ9Im0wIDBoMzJ2MzJoLTMyeiIgZmlsbD0iIzhDMzkwMCIvPg0KIDxwYXRoIGQ9Im04IDEwaDE2djEyaC0xNnptMTUgMTF2LTEwaC0xNHYxMHptLTItOHY2aC0xMHYtNnptLTEgNXYtNGgtOHY0eiIgZmlsbD0iI2ZmZiIvPg0KPC9zdmc+DQo=",
+	"isTrigger": false,
+	"operationName": "Get-Item-Version-History",
+	"operationDefinition": {
+		"type": "Scope",
+		"actions": {
+			"Site-Url": {
+				"type": "Compose",
+				"inputs": "https://contoso.sharepoint.com/sites/sales",
+				"runAfter": {},
+				"description": "Compose"
+			},
+			"List-Name": {
+				"type": "Compose",
+				"inputs": "Sample Library",
+				"runAfter": {
+					"Site-Url": [
+						"Succeeded"
+					]
+				},
+				"description": "Compose"
+			},
+			"List-Item-Id": {
+				"type": "Compose",
+				"inputs": 1,
+				"runAfter": {
+					"List-Name": [
+						"Succeeded"
+					]
+				},
+				"description": "Compose"
+			},
+			"Get-File-Versions": {
+				"type": "OpenApiConnection",
+				"inputs": {
+					"host": {
+						"connectionName": "shared_sharepointonline",
+						"operationId": "HttpRequest",
+						"apiId": "/providers/Microsoft.PowerApps/apis/shared_sharepointonline"
+					},
+					"parameters": {
+						"dataset": "@outputs('Site-Url')",
+						"parameters/method": "GET",
+						"parameters/uri": "_api/web/lists/getbytitle('@{outputs('List-Name')}')/items(@{outputs('List-Item-Id')})/versions@{if(not(empty(outputs('Version-Label'))), concat('?$filter=(VersionLabel eq ''', outputs('Version-Label'), ''')'), null)}"
+					},
+					"authentication": {
+						"type": "Raw",
+						"value": "@json(decodeBase64(triggerOutputs().headers['X-MS-APIM-Tokens']))['$ConnectionKey']"
+					}
+				},
+				"runAfter": {
+					"Version-Label": [
+						"Succeeded"
+					]
+				},
+				"description": "Send an HTTP request to SharePoint"
+			},
+			"Version-Label": {
+				"type": "Compose",
+				"inputs": "@null",
+				"runAfter": {
+					"List-Item-Id": [
+						"Succeeded"
+					]
+				},
+				"description": "Compose [Note: Enclose Version Label in Double Quotes (eg: \"2.0\")] [Optional]"
+			}
+		},
+		"runAfter": {},
+		"description": "Made With ♥ by @ohthreesixfive"
+	}
+}
