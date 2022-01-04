@@ -1,5 +1,5 @@
 {
-	"id": "bf66a41a-c991-4a1e-80c9-dee4-bb63d527",
+	"id": "fdcc5cb4-9612-451a-a9aa-01bb-8cff1467",
 	"brandColor": "#8C3900",
 	"connectionReferences": {
 		"shared_sharepointonline": {
@@ -15,17 +15,17 @@
 	"operationDefinition": {
 		"type": "Scope",
 		"actions": {
-			"Site-Url": {
+			"Site-Address": {
 				"type": "Compose",
 				"inputs": "https://contoso.sharepoint.com/sites/sales",
 				"runAfter": {},
 				"description": "Compose"
 			},
-			"List-Name": {
+			"List-Title": {
 				"type": "Compose",
-				"inputs": "Sample Library",
+				"inputs": "Sample List",
 				"runAfter": {
-					"Site-Url": [
+					"Site-Address": [
 						"Succeeded"
 					]
 				},
@@ -35,13 +35,13 @@
 				"type": "Compose",
 				"inputs": 1,
 				"runAfter": {
-					"List-Name": [
+					"List-Title": [
 						"Succeeded"
 					]
 				},
 				"description": "Compose"
 			},
-			"Get-File-Versions": {
+			"Get-Item-Versions": {
 				"type": "OpenApiConnection",
 				"inputs": {
 					"host": {
@@ -50,9 +50,9 @@
 						"apiId": "/providers/Microsoft.PowerApps/apis/shared_sharepointonline"
 					},
 					"parameters": {
-						"dataset": "@outputs('Site-Url')",
+						"dataset": "@outputs('Site-Address')",
 						"parameters/method": "GET",
-						"parameters/uri": "_api/web/lists/getbytitle('@{outputs('List-Name')}')/items(@{outputs('List-Item-Id')})/versions@{if(not(empty(outputs('Version-Label'))), concat('?$filter=(VersionLabel eq ''', outputs('Version-Label'), ''')'), null)}"
+						"parameters/uri": "_api/web/lists/getbytitle('@{outputs('List-Title')}')/items(@{outputs('List-Item-Id')})/versions@{if(not(empty(outputs('Version-Label'))), concat('?$filter=(VersionLabel eq ''', outputs('Version-Label'), ''')'), null)}"
 					},
 					"authentication": {
 						"type": "Raw",
